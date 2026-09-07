@@ -1,0 +1,52 @@
+#!/bin/sh
+. "$(dirname "$0")/husky.sh"
+
+COMMIT_MSG_FILE=$1
+prefix=(fix style feat docs refactor perf test build ci chore revert sonar merge rename)
+emoji=( 🐛    🎨   ✨  📚    ♻     ⚡   ✅   👷   🚀  🔧   ⏪    🧹    🔀    🚚)
+unicode=(1f41b 1f3a8 02728 1f4da 0267b 026a1 02705 1f477 1f680 1f527 023ea 1f9f9 1f500 1f69a)
+
+element_count=${#prefix[@]}
+msg=$(cat "$COMMIT_MSG_FILE")
+regexMatch="^("
+typeList="["
+params=""
+index=0
+while [ "$index" -lt "$element_count" ]
+do
+  regex="^\s*${prefix[$index]}:"
+  replace="${emoji[$index]}${prefix[$index]}:"
+  params+="-e ""s/$regex/$replace/"" "
+  if [ "$index" -ge 1 ]; then
+    typeList+=", "
+    regexMatch+="|"
+  fi
+  regexMatch+="\x{${unicode[$index]}}${prefix[$index]}:"
+
+  typeList+="${emoji[$index]}${prefix[$index]}"
+  let "index = index + 1"
+done
+regexMatch+=").+"
+typeList+="]"
+new_msg=$(sed $params <<< $msg)
+
+if [ $(grep -c -P "$regexMatch" <<< $new_msg) -eq 0 ]; then
+  if [[ $new_msg =~ ^Merge ]]; then
+    for i in "${!prefix[@]}"; do
+      if [ "${prefix[$i]}" == "merge" ]; then
+        new_msg="${emoji[$i]}merge: $new_msg"
+        break
+      fi
+      let "index = index + 1"
+    done
+  else
+    echo "Le titre doit être préfixé d'un de ces types : $typeList"
+    exit 1
+  fi
+fi
+
+if [ "$new_msg" != "$msg" ]
+then
+  echo "$new_msg" > $COMMIT_MSG_FILE
+  echo Réécriture du message : $new_msg
+fi
