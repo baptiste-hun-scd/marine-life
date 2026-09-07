@@ -1,15 +1,15 @@
-<div class="multi-select-autocomplete" (focusin)="onFocusIn()" (focusout)="onFocusOut($event)">
+<div class="wrapper" (focusin)="onFocusIn()" (focusout)="onFocusOut($event)">
   <label [for]="inputId()">{{ label() }}</label>
 
-  <div class="multi-select-autocomplete__field">
+  <div class="field">
     @if (visibleChips().length > 0) {
-      <ul class="multi-select-autocomplete__chips" [attr.aria-label]="'Valeurs sélectionnées pour ' + label()">
+      <ul class="chips" [attr.aria-label]="'Valeurs sélectionnées pour ' + label()">
         @for (option of visibleChips(); track option.id) {
-          <li class="multi-select-autocomplete__chip">
+          <li class="chip">
             {{ option.nom }}
             <button
               type="button"
-              class="multi-select-autocomplete__chip-remove"
+              class="chip-remove"
               [attr.aria-label]="'Retirer ' + option.nom"
               (click)="removeSelected(option.id)"
             >
@@ -18,7 +18,7 @@
           </li>
         }
         @if (extraCount() > 0) {
-          <li class="multi-select-autocomplete__chip multi-select-autocomplete__chip--more" [attr.aria-label]="extraCount() + ' de plus : ' + extraNames()">
+          <li class="chip chip--more" [attr.aria-label]="extraCount() + ' de plus : ' + extraNames()">
             +{{ extraCount() }}
           </li>
         }
@@ -35,13 +35,13 @@
       autocomplete="off"
       [attr.aria-controls]="inputId() + '-options'"
       [attr.aria-expanded]="showOptions()"
-      class="multi-select-autocomplete__input"
+      class="search-input"
     />
 
     @if (selectedIds().length > 0) {
       <button
         type="button"
-        class="multi-select-autocomplete__clear"
+        class="clear-button"
         [attr.aria-label]="'Effacer la sélection pour ' + label()"
         (click)="clearSelection()"
       >
@@ -51,20 +51,16 @@
   </div>
 
   @if (showOptions()) {
-    <ul
-      [id]="inputId() + '-options'"
-      class="multi-select-autocomplete__options"
-      (mousedown)="$event.preventDefault()"
-    >
+    <ul [id]="inputId() + '-options'" class="options" (mousedown)="$event.preventDefault()">
       @for (option of filteredOptions(); track option.id) {
-        <li class="multi-select-autocomplete__option">
+        <li class="option">
           <label>
             <input type="checkbox" [checked]="isSelected(option.id)" (change)="onToggle(option.id, $event)" />
             {{ option.nom }}
           </label>
         </li>
       } @empty {
-        <li class="multi-select-autocomplete__empty">Aucun résultat</li>
+        <li class="empty">Aucun résultat</li>
       }
     </ul>
   }

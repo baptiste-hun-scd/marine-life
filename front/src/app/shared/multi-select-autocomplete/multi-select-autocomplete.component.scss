@@ -2,13 +2,13 @@
   display: block;
 }
 
-.multi-select-autocomplete {
+.wrapper {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
 }
 
-.multi-select-autocomplete__chips {
+.chips {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
@@ -17,7 +17,7 @@
   padding: 0;
 }
 
-.multi-select-autocomplete__chip {
+.chip {
   display: flex;
   align-items: center;
   gap: 0.35rem;
@@ -27,7 +27,7 @@
   font-size: 0.85rem;
 }
 
-.multi-select-autocomplete__chip-remove {
+.chip-remove {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -43,18 +43,18 @@
   cursor: pointer;
 }
 
-.multi-select-autocomplete__chip-remove:hover,
-.multi-select-autocomplete__chip-remove:focus-visible {
+.chip-remove:hover,
+.chip-remove:focus-visible {
   background: #d0d7de;
 }
 
-.multi-select-autocomplete__chip--more {
+.chip--more {
   background: #e1e6ea;
   font-weight: 600;
   padding: 0.15rem 0.6rem;
 }
 
-.multi-select-autocomplete__field {
+.field {
   display: flex;
   align-items: center;
   gap: 0.35rem;
@@ -63,7 +63,7 @@
   padding-right: 0.35rem;
 }
 
-.multi-select-autocomplete__input {
+.search-input {
   flex: 1 1 auto;
   min-width: 0;
   padding: 0.4rem 0.6rem;
@@ -71,16 +71,16 @@
   border-radius: 0.35rem;
 }
 
-.multi-select-autocomplete__input:focus {
+.search-input:focus {
   outline: none;
 }
 
-.multi-select-autocomplete:focus-within .multi-select-autocomplete__field {
+.wrapper:focus-within .field {
   outline: 2px solid #2196f3;
   outline-offset: -1px;
 }
 
-.multi-select-autocomplete__clear {
+.clear-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -97,13 +97,13 @@
   cursor: pointer;
 }
 
-.multi-select-autocomplete__clear:hover,
-.multi-select-autocomplete__clear:focus-visible {
+.clear-button:hover,
+.clear-button:focus-visible {
   background: #eef1f4;
   color: inherit;
 }
 
-.multi-select-autocomplete__options {
+.options {
   display: flex;
   flex-direction: column;
   max-height: 12rem;
@@ -116,7 +116,7 @@
   background: #fff;
 }
 
-.multi-select-autocomplete__option label {
+.option label {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -125,11 +125,11 @@
   cursor: pointer;
 }
 
-.multi-select-autocomplete__option label:hover {
+.option label:hover {
   background: #f2f4f7;
 }
 
-.multi-select-autocomplete__empty {
+.empty {
   padding: 0.4rem 0.6rem;
   color: #57606a;
 }
