@@ -1,1 +1,241 @@
-/* You can add global styles to this file, and also import other style files */
+/* Oceanic Scholastic — global design tokens, see front/design.md */
+
+:root {
+  color-scheme: light;
+
+  /* Brand colors */
+  --color-primary: #001f3f; /* Abyssal Blue */
+  --color-on-primary: #ffffff;
+  --color-secondary: #0074d9; /* Surface Blue — interactive elements, primary actions */
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #e8f2ff;
+  --color-on-secondary-container: #004488;
+  --color-coral-container: rgba(255, 133, 27, 0.12); /* Coral — highlights, callouts, endangered status */
+  --color-on-coral-container: #a34600;
+
+  /* Neutral / surface scale */
+  --color-background: #f7f9fb; /* Sea-Salt White */
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f2f4f6;
+  --color-surface-container: #eceef0;
+  --color-surface-container-high: #e6e8ea;
+  --color-on-surface: #191c1e;
+  --color-on-surface-variant: #43474e;
+  --color-outline: #74777f;
+  --color-outline-variant: #c4c6cf;
+
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+
+  /* Conservation status tones */
+  --color-status-safe-bg: rgba(31, 167, 111, 0.12);
+  --color-status-safe-text: #146c43;
+  --color-status-warning-bg: rgba(255, 171, 0, 0.16);
+  --color-status-warning-text: #8a5a00;
+  --color-status-danger-bg: var(--color-coral-container);
+  --color-status-danger-text: var(--color-on-coral-container);
+
+  /* Typography */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Shape */
+  --radius-sm: 0.25rem;
+  --radius: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 48px;
+  --space-gutter: 20px;
+  --space-margin-mobile: 16px;
+  --space-margin-desktop: 64px;
+
+  /* Elevation — soft, blue-tinted, as if floating in water */
+  --shadow-card: 0 8px 24px rgba(0, 31, 63, 0.08);
+  --shadow-modal: 0 16px 48px rgba(0, 31, 63, 0.18);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-on-surface);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  color: var(--color-on-surface);
+  margin: 0;
+}
+
+h1 {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 40px;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 32px;
+}
+
+h3 {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 28px;
+}
+
+@media (min-width: 768px) {
+  h1 {
+    font-size: 48px;
+    line-height: 56px;
+  }
+
+  h2 {
+    font-size: 32px;
+    line-height: 40px;
+  }
+
+  h3 {
+    font-size: 24px;
+    line-height: 32px;
+  }
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input {
+  font-family: inherit;
+  color: inherit;
+}
+
+/* Application-wide utilities (glob- prefix, see CLAUDE.md) */
+
+.glob-container {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding: var(--space-margin-mobile);
+}
+
+@media (min-width: 960px) {
+  .glob-container {
+    padding: var(--space-lg) var(--space-margin-desktop);
+  }
+}
+
+.glob-card {
+  background: var(--color-surface-container-lowest);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.glob-label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-on-surface-variant);
+}
+
+.glob-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: 0.55rem 1.25rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.glob-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.glob-button--primary {
+  background: var(--color-secondary);
+  color: var(--color-on-secondary);
+}
+
+.glob-button--primary:hover:not(:disabled) {
+  background: var(--color-primary);
+}
+
+.glob-button--secondary {
+  background: transparent;
+  color: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+
+.glob-button--secondary:hover:not(:disabled) {
+  background: var(--color-secondary-container);
+}
+
+.glob-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-xl);
+  background: var(--color-surface-container-high);
+  color: var(--color-on-surface-variant);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 16px;
+}
+
+.glob-chip--safe {
+  background: var(--color-status-safe-bg);
+  color: var(--color-status-safe-text);
+}
+
+.glob-chip--warning {
+  background: var(--color-status-warning-bg);
+  color: var(--color-status-warning-text);
+}
+
+.glob-chip--danger {
+  background: var(--color-status-danger-bg);
+  color: var(--color-status-danger-text);
+}

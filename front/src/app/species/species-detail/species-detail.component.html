@@ -3,65 +3,65 @@
 } @else if (species.error()) {
   <p role="alert">Impossible de charger cette espèce.</p>
 } @else if (species.value(); as currentSpecies) {
-  <figure class="species-hero">
+  <figure class="hero">
     @if (currentSpecies.imageUrl) {
-      <img class="species-hero__image" [ngSrc]="currentSpecies.imageUrl" width="1200" height="675" priority alt="" />
+      <img class="hero-image" [ngSrc]="currentSpecies.imageUrl" width="1200" height="675" priority alt="" />
     } @else {
-      <div class="species-hero__image species-hero__image--placeholder" aria-hidden="true"></div>
+      <div class="hero-image hero-image--placeholder" aria-hidden="true"></div>
     }
 
-    <figcaption class="species-hero__caption">
-      <p class="species-hero__subtitle">{{ currentSpecies.scientificName }}</p>
-      <h1 class="species-hero__title">{{ currentSpecies.commonName }}</h1>
+    <figcaption class="hero-caption">
+      <p class="hero-subtitle">{{ currentSpecies.scientificName }}</p>
+      <h1 class="hero-title">{{ currentSpecies.commonName }}</h1>
 
       @if (chips().length > 0) {
-        <ul class="species-hero__chips">
+        <ul class="hero-chips">
           @for (chip of chips(); track chip.label) {
-            <li class="species-hero__chip species-hero__chip--{{ chip.tone }}">{{ chip.label }}</li>
+            <li class="glob-chip glob-chip--{{ chip.tone }}">{{ chip.label }}</li>
           }
         </ul>
       }
     </figcaption>
   </figure>
 
-  <section class="species-section" aria-labelledby="description-heading">
+  <section class="section" aria-labelledby="description-heading">
     <h2 id="description-heading">Description et biologie</h2>
-    <p class="species-description">
+    <p class="description">
       {{ currentSpecies.description ?? 'Aucune description disponible pour le moment.' }}
     </p>
   </section>
 
-  <section class="species-section" aria-labelledby="taxonomy-heading">
+  <section class="section" aria-labelledby="taxonomy-heading">
     <h2 id="taxonomy-heading">Taxonomie</h2>
-    <dl class="species-taxonomy">
+    <dl class="taxonomy">
       <div>
-        <dt>Nom scientifique</dt>
+        <dt class="glob-label">Nom scientifique</dt>
         <dd>{{ currentSpecies.scientificName }}</dd>
       </div>
       <div>
-        <dt>Nom vernaculaire</dt>
+        <dt class="glob-label">Nom vernaculaire</dt>
         <dd>{{ currentSpecies.commonName }}</dd>
       </div>
       <div>
-        <dt>Embranchement</dt>
+        <dt class="glob-label">Embranchement</dt>
         <dd>{{ currentSpecies.embranchement }}</dd>
       </div>
       <div>
-        <dt>Classe</dt>
+        <dt class="glob-label">Classe</dt>
         <dd>{{ currentSpecies.classe }}</dd>
       </div>
       <div>
-        <dt>Ordre</dt>
+        <dt class="glob-label">Ordre</dt>
         <dd>{{ currentSpecies.ordre }}</dd>
       </div>
     </dl>
   </section>
 
-  <section class="species-section" aria-labelledby="distribution-heading">
+  <section class="section" aria-labelledby="distribution-heading">
     <h2 id="distribution-heading">Distribution</h2>
     @if (currentSpecies.distributionMapUrl) {
       <img
-        class="species-distribution__map"
+        class="distribution-map"
         [ngSrc]="currentSpecies.distributionMapUrl"
         width="800"
         height="400"
@@ -72,7 +72,7 @@
     }
 
     @if (currentSpecies.habitat) {
-      <p class="species-distribution__habitat">{{ currentSpecies.habitat }}</p>
+      <p class="distribution-habitat">{{ currentSpecies.habitat }}</p>
     }
   </section>
 } @else {

@@ -1,7 +1,7 @@
 import { NgOptimizedImage } from '@angular/common';
 import { Component, computed, inject, input } from '@angular/core';
 import { SpeciesService } from '../species.service';
-import { VULNERABILITY_LABELS } from '../species.model';
+import { VULNERABILITY_LABELS, VULNERABILITY_TONE } from '../species.model';
 
 @Component({
   selector: 'app-species-detail',
@@ -26,7 +26,7 @@ export class SpeciesDetail {
     return [
       {
         label: VULNERABILITY_LABELS[currentSpecies.vulnerabilityLevel],
-        tone: currentSpecies.vulnerabilityLevel,
+        tone: VULNERABILITY_TONE[currentSpecies.vulnerabilityLevel],
       },
     ];
   });

@@ -1,31 +1,33 @@
-<article class="species-card">
-  @if (species().imageUrl) {
-    <img class="species-card__photo" [ngSrc]="species().imageUrl!" width="400" height="300" alt="" />
-  } @else {
-    <div class="species-card__photo species-card__photo--placeholder" aria-hidden="true"></div>
-  }
+<article class="card">
+  <div class="media">
+    @if (species().imageUrl) {
+      <img class="media-image" [ngSrc]="species().imageUrl!" width="400" height="300" alt="" />
+    } @else {
+      <div class="media-image media-image--placeholder" aria-hidden="true"></div>
+    }
 
-  <div class="species-card__body">
-    <h3 class="species-card__title">{{ species().scientificName }}</h3>
-    <p class="species-card__subtitle">{{ species().commonName }}</p>
+    <div class="media-caption">
+      <p class="title">{{ species().scientificName }}</p>
+      <p class="subtitle">{{ species().commonName }}</p>
+    </div>
+  </div>
 
-    <dl class="species-card__taxonomy">
+  <div class="body">
+    <dl class="taxonomy">
       <div>
-        <dt>Embranchement</dt>
+        <dt class="glob-label">Embranchement</dt>
         <dd>{{ species().embranchement }}</dd>
       </div>
       <div>
-        <dt>Classe</dt>
+        <dt class="glob-label">Classe</dt>
         <dd>{{ species().classe }}</dd>
       </div>
       <div>
-        <dt>Ordre</dt>
+        <dt class="glob-label">Ordre</dt>
         <dd>{{ species().ordre }}</dd>
       </div>
     </dl>
 
-    <span class="species-card__vulnerability species-card__vulnerability--{{ species().vulnerabilityLevel }}">
-      {{ vulnerabilityLabel() }}
-    </span>
+    <span class="glob-chip glob-chip--{{ vulnerabilityTone() }}">{{ vulnerabilityLabel() }}</span>
   </div>
 </article>

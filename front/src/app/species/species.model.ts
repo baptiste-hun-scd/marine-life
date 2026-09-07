@@ -7,6 +7,13 @@ export const VULNERABILITY_LABELS: Record<VulnerabilityLevel, string> = {
   vert: 'Préoccupation mineure',
 };
 
+/** Maps a vulnerability level to the `glob-chip--*` status tone used to render it. */
+export const VULNERABILITY_TONE: Record<VulnerabilityLevel, 'safe' | 'warning' | 'danger'> = {
+  rouge: 'danger',
+  orange: 'warning',
+  vert: 'safe',
+};
+
 /** A marine species as returned by the API. */
 export interface Species {
   id: string;

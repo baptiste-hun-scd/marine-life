@@ -2,120 +2,125 @@
   display: block;
 }
 
-.species-hero {
+.hero {
   position: relative;
   margin: 0;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
 }
 
-.species-hero__image {
+.hero-image {
   display: block;
   width: 100%;
   height: 22rem;
   object-fit: cover;
-  background: #e9edf1;
+  background: var(--color-surface-container-high);
 }
 
-.species-hero__image--placeholder {
+.hero-image--placeholder {
   height: 22rem;
 }
 
-.species-hero__caption {
+.hero-caption {
   position: absolute;
   inset-inline: 0;
   inset-block-end: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 1.5rem;
-  color: #fff;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+  gap: var(--space-xs);
+  padding: var(--space-lg);
+  color: var(--color-on-primary);
+  background: linear-gradient(to top, rgba(0, 31, 63, 0.85), rgba(0, 31, 63, 0));
 }
 
-.species-hero__subtitle {
+.hero-subtitle {
   margin: 0;
+  font-family: var(--font-display);
   font-style: italic;
-  font-size: 1rem;
+  font-size: 1.1rem;
 }
 
-.species-hero__title {
-  margin: 0;
-  font-size: 2rem;
+.hero-title {
+  color: var(--color-on-primary);
 }
 
-.species-hero__chips {
+.hero-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: var(--space-sm);
   list-style: none;
-  margin: 0.25rem 0 0;
+  margin: var(--space-xs) 0 0;
   padding: 0;
 }
 
-.species-hero__chip {
-  padding: 0.25rem 0.75rem;
-  border-radius: 999px;
-  font-size: 0.85rem;
-  font-weight: 600;
+.hero-chips .glob-chip {
+  background-color: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 }
 
-.species-hero__chip--vert {
-  background: #dafbe1;
-  color: #116329;
+.hero-chips .glob-chip--safe {
+  color: var(--color-status-safe-text);
 }
 
-.species-hero__chip--orange {
-  background: #fff1cc;
-  color: #7d4e00;
+.hero-chips .glob-chip--warning {
+  color: var(--color-status-warning-text);
 }
 
-.species-hero__chip--rouge {
-  background: #ffebe9;
-  color: #82071e;
+.hero-chips .glob-chip--danger {
+  color: var(--color-status-danger-text);
 }
 
-.species-section {
-  margin-top: 2rem;
+.section {
+  margin-top: var(--space-xl);
 }
 
-.species-description {
+.description {
   max-width: 65ch;
-  line-height: 1.6;
+  font-size: 18px;
+  line-height: 28px;
   white-space: pre-line;
 }
 
-.species-taxonomy {
+.taxonomy {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1px;
   margin: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 
-.species-taxonomy > div {
+.taxonomy > div {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem 0.75rem;
+  align-items: baseline;
+  gap: var(--space-xs) var(--space-md);
+  padding: var(--space-sm) var(--space-md);
 }
 
-.species-taxonomy dt {
+.taxonomy > div:nth-child(even) {
+  background: var(--color-secondary-container);
+}
+
+.taxonomy dt {
   flex: 0 0 10rem;
-  font-weight: 600;
-  color: #57606a;
 }
 
-.species-taxonomy dd {
+.taxonomy dd {
   margin: 0;
 }
 
-.species-distribution__map {
+.distribution-map {
   display: block;
   width: 100%;
   max-width: 50rem;
   height: auto;
-  border-radius: 0.5rem;
+  border-radius: var(--radius-lg);
 }
 
-.species-distribution__habitat {
+.distribution-habitat {
   max-width: 65ch;
-  margin-top: 0.75rem;
-  color: #57606a;
+  margin-top: var(--space-sm);
+  color: var(--color-on-surface-variant);
 }
