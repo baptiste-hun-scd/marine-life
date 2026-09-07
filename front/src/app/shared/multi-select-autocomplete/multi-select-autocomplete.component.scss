@@ -58,10 +58,21 @@
   display: flex;
   align-items: center;
   gap: var(--space-xs);
-  border: 1px solid var(--color-outline-variant);
+  border: 1px solid transparent;
   border-radius: var(--radius);
-  padding-right: var(--space-xs);
+  padding-right: var(--space-md);
+  background: var(--color-surface-container-high);
+}
+
+.wrapper:focus-within .field {
   background: var(--color-surface-container-lowest);
+}
+
+.chevron {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  color: var(--color-on-surface-variant);
 }
 
 .search-input {

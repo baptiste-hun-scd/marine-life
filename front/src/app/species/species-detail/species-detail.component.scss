@@ -22,6 +22,35 @@
   height: 22rem;
 }
 
+.back-button {
+  position: absolute;
+  inset-block-start: var(--space-md);
+  inset-inline-start: var(--space-md);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 0.5rem 0.9rem 0.5rem 0.6rem;
+  border: none;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(6px);
+  color: var(--color-on-surface);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.back-button:hover,
+.back-button:focus-visible {
+  background: var(--color-surface-container-lowest);
+}
+
+.back-button svg {
+  width: 18px;
+  height: 18px;
+}
+
 .hero-caption {
   position: absolute;
   inset-inline: 0;

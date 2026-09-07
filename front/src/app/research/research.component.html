@@ -1,46 +1,65 @@
-<h1>Vie marine</h1>
+<h1>Recherche taxonomique</h1>
+<p class="intro">
+  Recherchez et filtrez les espèces marines à travers un système de classification scientifique complet.
+</p>
 
-<form class="filters glob-card" role="search">
-  <label for="species-search">Rechercher une espèce</label>
-  <input
-    id="species-search"
-    name="species-search"
-    type="search"
-    autocomplete="off"
-    [value]="query()"
-    (input)="onQueryInput($event)"
-  />
+<form role="search">
+  <div class="search-bar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="11" cy="11" r="6" />
+      <line x1="20" y1="20" x2="15.5" y2="15.5" />
+    </svg>
+    <label for="species-search" class="glob-sr-only">Rechercher une espèce</label>
+    <input
+      id="species-search"
+      name="species-search"
+      type="search"
+      autocomplete="off"
+      placeholder="Rechercher par nom commun, genre…"
+      [value]="query()"
+      (input)="onQueryInput($event)"
+    />
+  </div>
 
-  <app-multi-select-autocomplete
-    inputId="filter-embranchement"
-    label="Embranchement"
-    placeholder="Rechercher un embranchement…"
-    [options]="embranchements()"
-    [selectedIds]="selectedEmbranchementIds()"
-    (selectedIdsChange)="onEmbranchementChange($event)"
-  />
+  <fieldset class="filters glob-card">
+    <legend class="glob-label">Classification</legend>
 
-  <app-multi-select-autocomplete
-    inputId="filter-classe"
-    label="Classe"
-    placeholder="Rechercher une classe…"
-    [options]="classes()"
-    [selectedIds]="selectedClasseIds()"
-    (selectedIdsChange)="onClasseChange($event)"
-  />
+    <app-multi-select-autocomplete
+      inputId="filter-embranchement"
+      label="Embranchement"
+      placeholder="Rechercher un embranchement…"
+      [options]="embranchements()"
+      [selectedIds]="selectedEmbranchementIds()"
+      (selectedIdsChange)="onEmbranchementChange($event)"
+    />
 
-  <app-multi-select-autocomplete
-    inputId="filter-ordre"
-    label="Ordre"
-    placeholder="Rechercher un ordre…"
-    [options]="ordres()"
-    [selectedIds]="selectedOrdreIds()"
-    (selectedIdsChange)="onOrdreChange($event)"
-  />
+    <app-multi-select-autocomplete
+      inputId="filter-classe"
+      label="Classe"
+      placeholder="Rechercher une classe…"
+      [options]="classes()"
+      [selectedIds]="selectedClasseIds()"
+      (selectedIdsChange)="onClasseChange($event)"
+    />
 
-  <button type="button" class="glob-button glob-button--secondary" [disabled]="!hasActiveFilters()" (click)="onReset()">
-    Réinitialiser
-  </button>
+    <app-multi-select-autocomplete
+      inputId="filter-ordre"
+      label="Ordre"
+      placeholder="Rechercher un ordre…"
+      [options]="ordres()"
+      [selectedIds]="selectedOrdreIds()"
+      (selectedIdsChange)="onOrdreChange($event)"
+    />
+
+    <button
+      type="button"
+      class="glob-button glob-button--secondary"
+      [disabled]="!hasActiveFilters()"
+      (click)="onReset()"
+    >
+      Réinitialiser
+    </button>
+  </fieldset>
 </form>
 
 @if (hasActiveFilters()) {

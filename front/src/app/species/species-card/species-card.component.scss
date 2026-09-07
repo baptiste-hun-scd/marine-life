@@ -64,17 +64,24 @@
 
 .taxonomy {
   display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
+  flex-wrap: wrap;
   margin: 0;
   font-size: 0.85rem;
+  color: var(--color-on-surface-variant);
+}
+
+.taxonomy > div {
+  display: contents;
 }
 
 .taxonomy dd {
   margin: 0;
-  color: var(--color-on-surface);
 }
 
-.glob-chip {
-  align-self: flex-start;
+.taxonomy > div + div dd {
+  margin-inline-start: 0.35rem;
+}
+
+.taxonomy > div + div dd::before {
+  content: '• ';
 }

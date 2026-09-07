@@ -15,19 +15,19 @@
   <div class="body">
     <dl class="taxonomy">
       <div>
-        <dt class="glob-label">Embranchement</dt>
+        <dt class="glob-sr-only">Embranchement</dt>
         <dd>{{ species().embranchement }}</dd>
       </div>
       <div>
-        <dt class="glob-label">Classe</dt>
+        <dt class="glob-sr-only">Classe</dt>
         <dd>{{ species().classe }}</dd>
       </div>
       <div>
-        <dt class="glob-label">Ordre</dt>
+        <dt class="glob-sr-only">Ordre</dt>
         <dd>{{ species().ordre }}</dd>
       </div>
     </dl>
 
-    <span class="glob-chip glob-chip--{{ vulnerabilityTone() }}">{{ vulnerabilityLabel() }}</span>
+    <p class="glob-callout glob-callout--{{ vulnerabilityTone() }}">{{ vulnerabilityLabel() }}</p>
   </div>
 </article>

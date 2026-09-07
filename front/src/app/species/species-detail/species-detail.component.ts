@@ -1,4 +1,4 @@
-import { NgOptimizedImage } from '@angular/common';
+import { Location, NgOptimizedImage } from '@angular/common';
 import { Component, computed, inject, input } from '@angular/core';
 import { SpeciesService } from '../species.service';
 import { VULNERABILITY_LABELS, VULNERABILITY_TONE } from '../species.model';
@@ -14,6 +14,7 @@ export class SpeciesDetail {
   readonly id = input.required<string>();
 
   private readonly speciesService = inject(SpeciesService);
+  private readonly location = inject(Location);
 
   protected readonly species = this.speciesService.byId(this.id);
 
@@ -30,4 +31,8 @@ export class SpeciesDetail {
       },
     ];
   });
+
+  protected goBack(): void {
+    this.location.back();
+  }
 }
