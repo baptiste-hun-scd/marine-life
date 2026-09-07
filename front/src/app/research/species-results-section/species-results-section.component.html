@@ -1,0 +1,21 @@
+<section [attr.aria-labelledby]="headingId()">
+  <h2 [id]="headingId()">{{ heading() }}</h2>
+
+  @if (isLoading()) {
+    <p>{{ loadingMessage() }}</p>
+  } @else if (hasError()) {
+    <p role="alert">{{ errorMessage() }}</p>
+  } @else if (speciesList().length === 0) {
+    <p>{{ emptyMessage() }}</p>
+  } @else {
+    <ul class="species-grid">
+      @for (species of speciesList(); track species.id) {
+        <li>
+          <a [routerLink]="['/species', species.id]" [attr.aria-label]="species.commonName + ' (' + species.scientificName + ')'">
+            <app-species-card [species]="species" />
+          </a>
+        </li>
+      }
+    </ul>
+  }
+</section>

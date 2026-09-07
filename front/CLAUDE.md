@@ -35,6 +35,7 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Do NOT use `ngClass`, use `class` bindings instead
 - Do NOT use `ngStyle`, use `style` bindings instead
 - When using external templates/styles, use paths relative to the component TS file.
+- Name components after this pattern : *.component.ts, *.component.html, *.component.scss where * is the name of the component
 
 ## State Management
 
@@ -49,6 +50,10 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Use native control flow (`@if`, `@for`, `@switch`) instead of `*ngIf`, `*ngFor`, `*ngSwitch`
 - Use the async pipe to handle observables
 - Do not assume globals like (`new Date()`) are available.
+- never use dislay: grid in css, use display: flex instead
+- always use aria-label on clickable elements
+- use html tag that can be used by accessibility technologies
+- respect RGAA
 
 ## Services
 
@@ -56,3 +61,4 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Use the `providedIn: 'root'` option for singleton services
 - Prefer the `@Service` decorator over `@Injectable({providedIn: 'root'})` for new singleton services (Angular v22+)
 - Use the `inject()` function instead of constructor injection
+- Name services after this pattern : *.service.ts where * is the name of the service

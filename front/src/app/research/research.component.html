@@ -1,0 +1,67 @@
+<h1>Vie marine</h1>
+
+<form role="search">
+  <label for="species-search">Rechercher une espèce</label>
+  <input
+    id="species-search"
+    name="species-search"
+    type="search"
+    autocomplete="off"
+    [value]="query()"
+    (input)="onQueryInput($event)"
+  />
+
+  <label for="filter-embranchement">Embranchement</label>
+  <select
+    id="filter-embranchement"
+    [value]="selectedEmbranchementId()"
+    (change)="onEmbranchementChange($event)"
+  >
+    <option value="">Tous</option>
+    @for (embranchement of embranchements(); track embranchement.id) {
+      <option [value]="embranchement.id">{{ embranchement.nom }}</option>
+    }
+  </select>
+
+  <label for="filter-classe">Classe</label>
+  <select id="filter-classe" [value]="selectedClasseId()" (change)="onClasseChange($event)">
+    <option value="">Toutes</option>
+    @for (classe of classes(); track classe.id) {
+      <option [value]="classe.id">{{ classe.nom }}</option>
+    }
+  </select>
+
+  <label for="filter-ordre">Ordre</label>
+  <select id="filter-ordre" [value]="selectedOrdreId()" (change)="onOrdreChange($event)">
+    <option value="">Tous</option>
+    @for (ordre of ordres(); track ordre.id) {
+      <option [value]="ordre.id">{{ ordre.nom }}</option>
+    }
+  </select>
+
+  <button type="button" [disabled]="!hasActiveFilters()" (click)="onReset()">Réinitialiser</button>
+</form>
+
+@if (hasActiveFilters()) {
+  <app-species-results-section
+    headingId="search-results-heading"
+    heading="Résultats de la recherche"
+    [speciesList]="results.value()"
+    [isLoading]="results.isLoading()"
+    [hasError]="!!results.error()"
+    loadingMessage="Recherche en cours…"
+    errorMessage="Une erreur est survenue pendant la recherche."
+    emptyMessage="Aucune espèce ne correspond à ces critères."
+  />
+} @else {
+  <app-species-results-section
+    headingId="latest-species-heading"
+    heading="Derniers ajouts"
+    [speciesList]="latestSpecies.value()"
+    [isLoading]="latestSpecies.isLoading()"
+    [hasError]="!!latestSpecies.error()"
+    loadingMessage="Chargement des derniers ajouts…"
+    errorMessage="Impossible de charger les derniers ajouts."
+    emptyMessage="Aucun ajout récent."
+  />
+}

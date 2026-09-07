@@ -1,0 +1,121 @@
+:host {
+  display: block;
+}
+
+.species-hero {
+  position: relative;
+  margin: 0;
+}
+
+.species-hero__image {
+  display: block;
+  width: 100%;
+  height: 22rem;
+  object-fit: cover;
+  background: #e9edf1;
+}
+
+.species-hero__image--placeholder {
+  height: 22rem;
+}
+
+.species-hero__caption {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  color: #fff;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+
+.species-hero__subtitle {
+  margin: 0;
+  font-style: italic;
+  font-size: 1rem;
+}
+
+.species-hero__title {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.species-hero__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0.25rem 0 0;
+  padding: 0;
+}
+
+.species-hero__chip {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.species-hero__chip--vert {
+  background: #dafbe1;
+  color: #116329;
+}
+
+.species-hero__chip--orange {
+  background: #fff1cc;
+  color: #7d4e00;
+}
+
+.species-hero__chip--rouge {
+  background: #ffebe9;
+  color: #82071e;
+}
+
+.species-section {
+  margin-top: 2rem;
+}
+
+.species-description {
+  max-width: 65ch;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.species-taxonomy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.species-taxonomy > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+}
+
+.species-taxonomy dt {
+  flex: 0 0 10rem;
+  font-weight: 600;
+  color: #57606a;
+}
+
+.species-taxonomy dd {
+  margin: 0;
+}
+
+.species-distribution__map {
+  display: block;
+  width: 100%;
+  max-width: 50rem;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.species-distribution__habitat {
+  max-width: 65ch;
+  margin-top: 0.75rem;
+  color: #57606a;
+}

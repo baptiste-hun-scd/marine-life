@@ -1,0 +1,31 @@
+<article class="species-card">
+  @if (species().imageUrl) {
+    <img class="species-card__photo" [ngSrc]="species().imageUrl!" width="400" height="300" alt="" />
+  } @else {
+    <div class="species-card__photo species-card__photo--placeholder" aria-hidden="true"></div>
+  }
+
+  <div class="species-card__body">
+    <h3 class="species-card__title">{{ species().scientificName }}</h3>
+    <p class="species-card__subtitle">{{ species().commonName }}</p>
+
+    <dl class="species-card__taxonomy">
+      <div>
+        <dt>Embranchement</dt>
+        <dd>{{ species().embranchement }}</dd>
+      </div>
+      <div>
+        <dt>Classe</dt>
+        <dd>{{ species().classe }}</dd>
+      </div>
+      <div>
+        <dt>Ordre</dt>
+        <dd>{{ species().ordre }}</dd>
+      </div>
+    </dl>
+
+    <span class="species-card__vulnerability species-card__vulnerability--{{ species().vulnerabilityLevel }}">
+      {{ vulnerabilityLabel() }}
+    </span>
+  </div>
+</article>
