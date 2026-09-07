@@ -11,33 +11,32 @@
     (input)="onQueryInput($event)"
   />
 
-  <label for="filter-embranchement">Embranchement</label>
-  <select
-    id="filter-embranchement"
-    [value]="selectedEmbranchementId()"
-    (change)="onEmbranchementChange($event)"
-  >
-    <option value="">Tous</option>
-    @for (embranchement of embranchements(); track embranchement.id) {
-      <option [value]="embranchement.id">{{ embranchement.nom }}</option>
-    }
-  </select>
+  <app-multi-select-autocomplete
+    inputId="filter-embranchement"
+    label="Embranchement"
+    placeholder="Rechercher un embranchement…"
+    [options]="embranchements()"
+    [selectedIds]="selectedEmbranchementIds()"
+    (selectedIdsChange)="onEmbranchementChange($event)"
+  />
 
-  <label for="filter-classe">Classe</label>
-  <select id="filter-classe" [value]="selectedClasseId()" (change)="onClasseChange($event)">
-    <option value="">Toutes</option>
-    @for (classe of classes(); track classe.id) {
-      <option [value]="classe.id">{{ classe.nom }}</option>
-    }
-  </select>
+  <app-multi-select-autocomplete
+    inputId="filter-classe"
+    label="Classe"
+    placeholder="Rechercher une classe…"
+    [options]="classes()"
+    [selectedIds]="selectedClasseIds()"
+    (selectedIdsChange)="onClasseChange($event)"
+  />
 
-  <label for="filter-ordre">Ordre</label>
-  <select id="filter-ordre" [value]="selectedOrdreId()" (change)="onOrdreChange($event)">
-    <option value="">Tous</option>
-    @for (ordre of ordres(); track ordre.id) {
-      <option [value]="ordre.id">{{ ordre.nom }}</option>
-    }
-  </select>
+  <app-multi-select-autocomplete
+    inputId="filter-ordre"
+    label="Ordre"
+    placeholder="Rechercher un ordre…"
+    [options]="ordres()"
+    [selectedIds]="selectedOrdreIds()"
+    (selectedIdsChange)="onOrdreChange($event)"
+  />
 
   <button type="button" [disabled]="!hasActiveFilters()" (click)="onReset()">Réinitialiser</button>
 </form>

@@ -104,20 +104,22 @@ export class TaxonomyService {
     return this.tree();
   }
 
-  /** Classes of the given embranchement, or every class of every embranchement when none is selected. */
-  classes(embranchementId: string | undefined): Classe[] {
-    if (!embranchementId) {
+  /** Classes of the given embranchements, or every class of every embranchement when none is selected. */
+  classes(embranchementIds: string[] | undefined): Classe[] {
+    if (!embranchementIds?.length) {
       return this.embranchements().flatMap((embranchement) => embranchement.classes);
     }
-    return this.embranchements().find((embranchement) => embranchement.id === embranchementId)?.classes ?? [];
+    return this.embranchements()
+      .filter((embranchement) => embranchementIds.includes(embranchement.id))
+      .flatMap((embranchement) => embranchement.classes);
   }
 
-  /** Orders of the given classe, or every order in scope (see `classes`) when none is selected. */
-  ordres(embranchementId: string | undefined, classeId: string | undefined): Ordre[] {
-    const classes = this.classes(embranchementId);
-    if (!classeId) {
+  /** Orders of the given classes, or every order in scope (see `classes`) when none is selected. */
+  ordres(embranchementIds: string[] | undefined, classeIds: string[] | undefined): Ordre[] {
+    const classes = this.classes(embranchementIds);
+    if (!classeIds?.length) {
       return classes.flatMap((classe) => classe.ordres);
     }
-    return classes.find((classe) => classe.id === classeId)?.ordres ?? [];
+    return classes.filter((classe) => classeIds.includes(classe.id)).flatMap((classe) => classe.ordres);
   }
 }

@@ -1,0 +1,71 @@
+<div class="multi-select-autocomplete" (focusin)="onFocusIn()" (focusout)="onFocusOut($event)">
+  <label [for]="inputId()">{{ label() }}</label>
+
+  <div class="multi-select-autocomplete__field">
+    @if (visibleChips().length > 0) {
+      <ul class="multi-select-autocomplete__chips" [attr.aria-label]="'Valeurs sélectionnées pour ' + label()">
+        @for (option of visibleChips(); track option.id) {
+          <li class="multi-select-autocomplete__chip">
+            {{ option.nom }}
+            <button
+              type="button"
+              class="multi-select-autocomplete__chip-remove"
+              [attr.aria-label]="'Retirer ' + option.nom"
+              (click)="removeSelected(option.id)"
+            >
+              ×
+            </button>
+          </li>
+        }
+        @if (extraCount() > 0) {
+          <li class="multi-select-autocomplete__chip multi-select-autocomplete__chip--more" [attr.aria-label]="extraCount() + ' de plus : ' + extraNames()">
+            +{{ extraCount() }}
+          </li>
+        }
+      </ul>
+    }
+
+    <input
+      [id]="inputId()"
+      type="text"
+      [value]="searchTerm()"
+      (input)="onSearchInput($event)"
+      (keydown.escape)="onEscape($event)"
+      [placeholder]="effectivePlaceholder()"
+      autocomplete="off"
+      [attr.aria-controls]="inputId() + '-options'"
+      [attr.aria-expanded]="showOptions()"
+      class="multi-select-autocomplete__input"
+    />
+
+    @if (selectedIds().length > 0) {
+      <button
+        type="button"
+        class="multi-select-autocomplete__clear"
+        [attr.aria-label]="'Effacer la sélection pour ' + label()"
+        (click)="clearSelection()"
+      >
+        ×
+      </button>
+    }
+  </div>
+
+  @if (showOptions()) {
+    <ul
+      [id]="inputId() + '-options'"
+      class="multi-select-autocomplete__options"
+      (mousedown)="$event.preventDefault()"
+    >
+      @for (option of filteredOptions(); track option.id) {
+        <li class="multi-select-autocomplete__option">
+          <label>
+            <input type="checkbox" [checked]="isSelected(option.id)" (change)="onToggle(option.id, $event)" />
+            {{ option.nom }}
+          </label>
+        </li>
+      } @empty {
+        <li class="multi-select-autocomplete__empty">Aucun résultat</li>
+      }
+    </ul>
+  }
+</div>

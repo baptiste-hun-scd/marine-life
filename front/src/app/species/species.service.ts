@@ -24,9 +24,9 @@ const FAKE_SPECIES_DETAIL: Species = {
 
 export interface SpeciesSearchParams {
   term: string;
-  embranchementId?: string;
-  classeId?: string;
-  ordreId?: string;
+  embranchementIds?: string[];
+  classeIds?: string[];
+  ordreIds?: string[];
 }
 
 /** Fake species, standing in until the `/api/species` search endpoint exists. */
@@ -371,21 +371,30 @@ export class SpeciesService {
    */
   search(params: () => SpeciesSearchParams) {
     const value = computed(() => {
-      const { term, embranchementId, classeId, ordreId } = params();
+      const { term, embranchementIds, classeIds, ordreIds } = params();
       const trimmedTerm = term.trim().toLowerCase();
 
-      if (!trimmedTerm && !embranchementId && !classeId && !ordreId) {
+      if (!trimmedTerm && !embranchementIds?.length && !classeIds?.length && !ordreIds?.length) {
         return [];
       }
 
-      const embranchementNom = embranchementId
-        ? this.taxonomyService.embranchements().find((embranchement) => embranchement.id === embranchementId)?.nom
+      const embranchementNoms = embranchementIds?.length
+        ? this.taxonomyService
+            .embranchements()
+            .filter((embranchement) => embranchementIds.includes(embranchement.id))
+            .map((embranchement) => embranchement.nom)
         : undefined;
-      const classeNom = classeId
-        ? this.taxonomyService.classes(embranchementId).find((classe) => classe.id === classeId)?.nom
+      const classeNoms = classeIds?.length
+        ? this.taxonomyService
+            .classes(embranchementIds)
+            .filter((classe) => classeIds.includes(classe.id))
+            .map((classe) => classe.nom)
         : undefined;
-      const ordreNom = ordreId
-        ? this.taxonomyService.ordres(embranchementId, classeId).find((ordre) => ordre.id === ordreId)?.nom
+      const ordreNoms = ordreIds?.length
+        ? this.taxonomyService
+            .ordres(embranchementIds, classeIds)
+            .filter((ordre) => ordreIds.includes(ordre.id))
+            .map((ordre) => ordre.nom)
         : undefined;
 
       return FAKE_SPECIES.filter((species) => {
@@ -393,9 +402,9 @@ export class SpeciesService {
           !trimmedTerm ||
           species.commonName.toLowerCase().includes(trimmedTerm) ||
           species.scientificName.toLowerCase().includes(trimmedTerm);
-        const matchesEmbranchement = !embranchementNom || species.embranchement === embranchementNom;
-        const matchesClasse = !classeNom || species.classe === classeNom;
-        const matchesOrdre = !ordreNom || species.ordre === ordreNom;
+        const matchesEmbranchement = !embranchementNoms || embranchementNoms.includes(species.embranchement);
+        const matchesClasse = !classeNoms || classeNoms.includes(species.classe);
+        const matchesOrdre = !ordreNoms || ordreNoms.includes(species.ordre);
         return matchesTerm && matchesEmbranchement && matchesClasse && matchesOrdre;
       });
     });
