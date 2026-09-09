@@ -1,8 +1,13 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { debounceTime } from 'rxjs';
 import { MultiSelectAutocomplete } from '../shared/multi-select-autocomplete/multi-select-autocomplete.component';
 import { SpeciesService } from '../species/species.service';
 import { TaxonomyService } from '../species/taxonomy.service';
 import { SpeciesResultsSection } from './species-results-section/species-results-section.component';
+
+/** Delay before a typed search term triggers a request, so we don't fire one per keystroke. */
+const SEARCH_DEBOUNCE_MS = 300;
 
 @Component({
   selector: 'app-research',
@@ -15,6 +20,10 @@ export class Research {
   private readonly taxonomyService = inject(TaxonomyService);
 
   protected readonly query = signal('');
+  private readonly debouncedQuery = toSignal(
+    toObservable(this.query).pipe(debounceTime(SEARCH_DEBOUNCE_MS)),
+    { initialValue: '' },
+  );
   protected readonly selectedEmbranchementIds = signal<string[]>([]);
   protected readonly selectedClasseIds = signal<string[]>([]);
   protected readonly selectedOrdreIds = signal<string[]>([]);
@@ -34,7 +43,7 @@ export class Research {
   );
 
   protected readonly results = this.speciesService.search(() => ({
-    term: this.query(),
+    term: this.debouncedQuery(),
     embranchementIds: this.selectedEmbranchementIds(),
     classeIds: this.selectedClasseIds(),
     ordreIds: this.selectedOrdreIds(),

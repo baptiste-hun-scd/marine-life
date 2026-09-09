@@ -38,6 +38,7 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Name components after this pattern : *.component.ts, *.component.html, *.component.scss where * is the name of the component
 - do not prefix css classes by the name of the component as it is encapsulated.
 - for application css rules, prefix css classes by glob-*
+- try to keep cyclomatic complexity under 10, except for _._.spec.ts filess
 
 ## State Management
 
