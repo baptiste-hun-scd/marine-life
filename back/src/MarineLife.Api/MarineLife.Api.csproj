@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MarineLife.Business\MarineLife.Business.csproj" />
+    <ProjectReference Include="..\MarineLife.Database\MarineLife.Database.csproj" />
+    <ProjectReference Include="..\MarineLife.Infrastructure\MarineLife.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

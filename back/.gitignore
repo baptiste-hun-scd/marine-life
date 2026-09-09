@@ -1,0 +1,10 @@
+## .NET build artifacts
+bin/
+obj/
+.vs/
+*.user
+
+## SQLite dev database
+*.db
+*.db-shm
+*.db-wal
