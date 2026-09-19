@@ -18,6 +18,7 @@ permissions:
 jobs:
   build:
     runs-on: self-hosted
+    environment: prod
     env:
       FRONT_URL: ${{ vars.FRONT_URL }}
     defaults:

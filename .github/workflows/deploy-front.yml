@@ -18,6 +18,7 @@ permissions:
 jobs:
   build:
     runs-on: self-hosted
+    environment: prod
     env:
       API_URL: ${{ vars.API_URL }}
     defaults:
