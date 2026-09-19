@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: self-hosted
     env:
       API_URL: ${{ vars.API_URL }}
     defaults:
@@ -58,7 +58,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: [self-hosted, windows, iis]
+    runs-on: self-hosted
     environment: production
     env:
       IIS_SITE_NAME: ${{ vars.IIS_FRONT_SITE_NAME }}
