@@ -12,93 +12,79 @@ concurrency:
   group: deploy-front
   cancel-in-progress: false
 
-permissions:
-  contents: read
-
 jobs:
-  build:
+  deploy:
     runs-on: self-hosted
     environment: prod
-    env:
-      API_URL: ${{ secrets.API_URL }}
     defaults:
       run:
         shell: bash
-        working-directory: front
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: npm
-          cache-dependency-path: front/package-lock.json
 
-      - name: Check variables
+      - name: Replace secrets in environment.ts
         run: |
-          [ -n "$API_URL" ] || { echo "Secret API_URL is not set." >&2; exit 1; }
+          api_url='${{ secrets.API_URL }}'
+          [ -n "$api_url" ] || { echo "Secret API_URL is not set." >&2; exit 1; }
 
-      - run: npm ci
-
-      - run: npx ng test --watch=false
-
-      - name: Set API url
-        run: |
-          file=src/environments/environment.ts
+          file=front/src/environments/environment.ts
           content=$(<"$file")
-          printf '%s\n' "${content//__API_URL__/"$API_URL"}" > "$file"
+          printf '%s\n' "${content//__API_URL__/"$api_url"}" > "$file"
           if grep -q '__API_URL__' "$file"; then echo "Unreplaced token left in $file." >&2; exit 1; fi
 
-      - run: npx ng build --configuration production
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: front
-          path: front/dist/marine-life/browser
-          if-no-files-found: error
-
-  deploy:
-    needs: build
-    runs-on: self-hosted
-    environment: prod
-    env:
-      IIS_SITE_NAME: ${{ secrets.IIS_FRONT_SITE_NAME }}
-      IIS_DEPLOY_PATH: ${{ secrets.IIS_FRONT_DEPLOY_PATH }}
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: front
-          path: ${{ runner.temp }}/front
-
-      - name: Deploy to IIS
+      - name: Install packages
         run: |
+          cd front
+          npm ci
+
+      - name: Run tests
+        run: |
+          cd front
+          npx ng test --watch=false
+
+      - name: Build Angular app
+        run: |
+          cd front
+          npx ng build --configuration production
+
+      - name: Deploy frontend
+        run: |
+          site='${{ secrets.IIS_FRONT_SITE_NAME }}'
+          deploy_path='${{ secrets.IIS_FRONT_DEPLOY_PATH }}'
+          if [ -z "$site" ] || [ -z "$deploy_path" ]; then
+            echo "Secrets IIS_FRONT_SITE_NAME and IIS_FRONT_DEPLOY_PATH must be set." >&2; exit 1
+          fi
+
           export MSYS_NO_PATHCONV=1
-          SOURCE_PATH=$(cygpath -w -a "$RUNNER_TEMP/front")
           appcmd="$WINDIR/System32/inetsrv/appcmd.exe"
           bs='\'
           norm() { local p; p=$(cygpath -w -a "$1"); p=${p,,}; while [[ "$p" == *"$bs" ]]; do p=${p%"$bs"}; done; printf '%s' "$p"; }
 
-          if [ -z "$IIS_SITE_NAME" ] || [ -z "$IIS_DEPLOY_PATH" ]; then
-            echo "Secrets IIS_FRONT_SITE_NAME and IIS_FRONT_DEPLOY_PATH must be set." >&2; exit 1
-          fi
-          "$appcmd" list site "$IIS_SITE_NAME" > /dev/null || { echo "IIS site '$IIS_SITE_NAME' not found." >&2; exit 1; }
+          "$appcmd" list site "$site" > /dev/null || { echo "IIS site '$site' not found." >&2; exit 1; }
 
-          target=$(cygpath -w -a "$IIS_DEPLOY_PATH")
-          if [[ "$(norm "$IIS_DEPLOY_PATH")" =~ ^[a-z]:$ ]]; then echo "Refusing to deploy to a drive root." >&2; exit 1; fi
+          source=$(cygpath -w -a front/dist/marine-life/browser)
+          target=$(cygpath -w -a "$deploy_path")
+          if [[ "$(norm "$deploy_path")" =~ ^[a-z]:$ ]]; then echo "Refusing to deploy to a drive root." >&2; exit 1; fi
 
-          site_path=$("$appcmd" list vdir "$IIS_SITE_NAME/" /text:physicalPath | tr -d '\r')
-          if [ "$(norm "$site_path")" != "$(norm "$IIS_DEPLOY_PATH")" ]; then
-            echo "IIS site '$IIS_SITE_NAME' points to '$site_path', not to '$target'." >&2; exit 1
+          site_path=$("$appcmd" list vdir "$site/" /text:physicalPath | tr -d '\r')
+          if [ "$(norm "$site_path")" != "$(norm "$deploy_path")" ]; then
+            echo "IIS site '$site' points to '$site_path', not to '$target'." >&2; exit 1
           fi
 
           mkdir -p "$(cygpath -u "$target")"
 
           code=0
-          robocopy "$SOURCE_PATH" "$target" /MIR /NFL /NDL /NP /R:5 /W:3 || code=$?
+          robocopy "$source" "$target" /MIR /NFL /NDL /NP /R:5 /W:3 || code=$?
           if [ "$code" -ge 8 ]; then echo "robocopy failed (exit code $code)." >&2; exit 1; fi
 
-          state=$("$appcmd" list site "$IIS_SITE_NAME" /text:state | tr -d '\r')
-          [ "$state" = "Started" ] || "$appcmd" start site "$IIS_SITE_NAME"
+          state=$("$appcmd" list site "$site" /text:state | tr -d '\r')
+          [ "$state" = "Started" ] || "$appcmd" start site "$site"
+
+          echo "Deployment completed successfully!"
