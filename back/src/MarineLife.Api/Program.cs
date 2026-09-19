@@ -7,12 +7,14 @@ using MarineLife.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-const string AngularDevCorsPolicy = "AngularDev";
+const string FrontCorsPolicy = "Front";
+
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
 
 builder.Services.AddCors(options =>
     options.AddPolicy(
-        AngularDevCorsPolicy,
-        policy => policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod()));
+        FrontCorsPolicy,
+        policy => policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod()));
 
 var connectionString = builder.Configuration.GetConnectionString("MarineLife")
     ?? throw new InvalidOperationException("Missing 'MarineLife' connection string.");
@@ -37,7 +39,7 @@ if (app.Environment.IsDevelopment())
     await DbSeeder.SeedAsync(dbContext);
 }
 
-app.UseCors(AngularDevCorsPolicy);
+app.UseCors(FrontCorsPolicy);
 app.UseApiRateLimiting();
 
 app.MapSpeciesEndpoints();
