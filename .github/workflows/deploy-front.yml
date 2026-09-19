@@ -63,7 +63,6 @@ jobs:
     env:
       IIS_SITE_NAME: ${{ vars.IIS_FRONT_SITE_NAME }}
       IIS_DEPLOY_PATH: ${{ vars.IIS_FRONT_DEPLOY_PATH }}
-      SOURCE_PATH: ${{ runner.temp }}\front
     defaults:
       run:
         shell: bash
@@ -76,6 +75,7 @@ jobs:
       - name: Deploy to IIS
         run: |
           export MSYS_NO_PATHCONV=1
+          SOURCE_PATH=$(cygpath -w -a "$RUNNER_TEMP/front")
           appcmd="$WINDIR/System32/inetsrv/appcmd.exe"
           bs='\'
           norm() { local p; p=$(cygpath -w -a "$1"); p=${p,,}; while [[ "$p" == *"$bs" ]]; do p=${p%"$bs"}; done; printf '%s' "$p"; }
