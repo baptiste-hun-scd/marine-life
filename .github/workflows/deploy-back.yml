@@ -20,7 +20,7 @@ jobs:
     runs-on: self-hosted
     environment: prod
     env:
-      FRONT_URL: ${{ vars.FRONT_URL }}
+      FRONT_URL: ${{ secrets.FRONT_URL }}
     defaults:
       run:
         shell: bash
@@ -33,7 +33,7 @@ jobs:
 
       - name: Check variables
         run: |
-          [ -n "$FRONT_URL" ] || { echo "Repository variable FRONT_URL is not set." >&2; exit 1; }
+          [ -n "$FRONT_URL" ] || { echo "Secret FRONT_URL is not set." >&2; exit 1; }
 
       - name: Publish
         run: dotnet publish back/src/MarineLife.Api -c Release -o publish
@@ -56,8 +56,8 @@ jobs:
     runs-on: self-hosted
     environment: production
     env:
-      IIS_SITE_NAME: ${{ vars.IIS_BACK_SITE_NAME }}
-      IIS_DEPLOY_PATH: ${{ vars.IIS_BACK_DEPLOY_PATH }}
+      IIS_SITE_NAME: ${{ secrets.IIS_BACK_SITE_NAME }}
+      IIS_DEPLOY_PATH: ${{ secrets.IIS_BACK_DEPLOY_PATH }}
     defaults:
       run:
         shell: bash
@@ -76,7 +76,7 @@ jobs:
           norm() { local p; p=$(cygpath -w -a "$1"); p=${p,,}; while [[ "$p" == *"$bs" ]]; do p=${p%"$bs"}; done; printf '%s' "$p"; }
 
           if [ -z "$IIS_SITE_NAME" ] || [ -z "$IIS_DEPLOY_PATH" ]; then
-            echo "Repository variables IIS_BACK_SITE_NAME and IIS_BACK_DEPLOY_PATH must be set." >&2; exit 1
+            echo "Secrets IIS_BACK_SITE_NAME and IIS_BACK_DEPLOY_PATH must be set." >&2; exit 1
           fi
           "$appcmd" list site "$IIS_SITE_NAME" > /dev/null || { echo "IIS site '$IIS_SITE_NAME' not found." >&2; exit 1; }
 

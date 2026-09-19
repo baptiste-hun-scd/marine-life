@@ -20,7 +20,7 @@ jobs:
     runs-on: self-hosted
     environment: prod
     env:
-      API_URL: ${{ vars.API_URL }}
+      API_URL: ${{ secrets.API_URL }}
     defaults:
       run:
         shell: bash
@@ -36,7 +36,7 @@ jobs:
 
       - name: Check variables
         run: |
-          [ -n "$API_URL" ] || { echo "Repository variable API_URL is not set." >&2; exit 1; }
+          [ -n "$API_URL" ] || { echo "Secret API_URL is not set." >&2; exit 1; }
 
       - run: npm ci
 
@@ -62,8 +62,8 @@ jobs:
     runs-on: self-hosted
     environment: production
     env:
-      IIS_SITE_NAME: ${{ vars.IIS_FRONT_SITE_NAME }}
-      IIS_DEPLOY_PATH: ${{ vars.IIS_FRONT_DEPLOY_PATH }}
+      IIS_SITE_NAME: ${{ secrets.IIS_FRONT_SITE_NAME }}
+      IIS_DEPLOY_PATH: ${{ secrets.IIS_FRONT_DEPLOY_PATH }}
     defaults:
       run:
         shell: bash
@@ -82,7 +82,7 @@ jobs:
           norm() { local p; p=$(cygpath -w -a "$1"); p=${p,,}; while [[ "$p" == *"$bs" ]]; do p=${p%"$bs"}; done; printf '%s' "$p"; }
 
           if [ -z "$IIS_SITE_NAME" ] || [ -z "$IIS_DEPLOY_PATH" ]; then
-            echo "Repository variables IIS_FRONT_SITE_NAME and IIS_FRONT_DEPLOY_PATH must be set." >&2; exit 1
+            echo "Secrets IIS_FRONT_SITE_NAME and IIS_FRONT_DEPLOY_PATH must be set." >&2; exit 1
           fi
           "$appcmd" list site "$IIS_SITE_NAME" > /dev/null || { echo "IIS site '$IIS_SITE_NAME' not found." >&2; exit 1; }
 
