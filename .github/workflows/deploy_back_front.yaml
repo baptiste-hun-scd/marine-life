@@ -1,0 +1,123 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    environment: prod
+
+    env:
+      FRONT_ENV_FILE: front/src/environments/environment.ts
+      BACK_APPSETTINGS_FILE: back/src/MarineLife.Api/appsettings.Production.json
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # -----------------------------
+      # 1. CONFIGURATION DU BACKEND
+      # -----------------------------
+
+      - name: Replace secrets in appsettings.Production.json
+        run: |
+          $file = Join-Path $PWD $env:BACK_APPSETTINGS_FILE
+          $value = '${{ secrets.FRONT_URL }}'
+          if (-not $value) { throw 'Secret FRONT_URL is not set.' }
+          $content = (Get-Content $file -Raw).Replace('__FRONT_URL__', $value)
+          if ($content.Contains('__FRONT_URL__')) { throw "Unreplaced token left in $file" }
+          [System.IO.File]::WriteAllText($file, $content)
+
+      - name: Restore .NET dependencies
+        run: dotnet restore back/MarineLife.sln
+
+      - name: Build backend
+        run: dotnet build back/MarineLife.sln --configuration Release --no-restore
+
+      - name: Publish backend
+        run: dotnet publish back/src/MarineLife.Api -c Release -o ./publish/back --no-build
+
+      # -----------------------------
+      # 2. CONFIGURATION DU FRONTEND
+      # -----------------------------
+      - name: Replace secrets in environment.ts
+        run: |
+          $file = Join-Path $PWD $env:FRONT_ENV_FILE
+          $value = '${{ secrets.API_URL }}'
+          if (-not $value) { throw 'Secret API_URL is not set.' }
+          $content = (Get-Content $file -Raw).Replace('__API_URL__', $value)
+          if ($content.Contains('__API_URL__')) { throw "Unreplaced token left in $file" }
+          [System.IO.File]::WriteAllText($file, $content)
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install packages
+        run: |
+          cd front
+          npm ci
+
+      - name: Run tests
+        run: |
+          cd front
+          npx ng test --watch=false
+
+      - name: Build Angular app
+        run: |
+          cd front
+          npx ng build --configuration production
+
+      # -----------------------------
+      # 3. DÉPLOIEMENT
+      # -----------------------------
+      - name: Deploy backend & frontend
+        run: |
+          $backSite = '${{ secrets.IIS_BACK_SITE_NAME }}'
+          $backPath = '${{ secrets.IIS_BACK_DEPLOY_PATH }}'
+          $frontSite = '${{ secrets.IIS_FRONT_SITE_NAME }}'
+          $frontPath = '${{ secrets.IIS_FRONT_DEPLOY_PATH }}'
+
+          foreach ($secret in @(
+              @('IIS_BACK_SITE_NAME', $backSite), @('IIS_BACK_DEPLOY_PATH', $backPath),
+              @('IIS_FRONT_SITE_NAME', $frontSite), @('IIS_FRONT_DEPLOY_PATH', $frontPath))) {
+            if (-not $secret[1]) { throw "Secret $($secret[0]) is not set." }
+          }
+          foreach ($path in @($backPath, $frontPath)) {
+            if ($path.TrimEnd('\') -match '^[A-Za-z]:$') { throw "Refusing to deploy to a drive root: $path" }
+          }
+
+          $backPool = (Get-Website -Name $backSite).applicationPool
+          if (-not $backPool) { throw "IIS site '$backSite' not found." }
+          if (-not (Get-Website -Name $frontSite)) { throw "IIS site '$frontSite' not found." }
+
+          # Arrêter l'app pool IIS
+          Write-Host "Stopping IIS Application Pool '$backPool'..."
+          if ((Get-WebAppPoolState -Name $backPool).Value -ne 'Stopped') {
+            Stop-WebAppPool -Name $backPool
+          }
+          Start-Sleep -Seconds 5
+
+          robocopy publish\back $backPath /MIR /NFL /NDL /NP /R:5 /W:3
+          if ($LASTEXITCODE -gt 7) { exit $LASTEXITCODE }
+
+          robocopy front\dist\marine-life\browser $frontPath /MIR /NFL /NDL /NP /R:5 /W:3
+          if ($LASTEXITCODE -gt 7) { exit $LASTEXITCODE }
+
+          Write-Host "Starting IIS Application Pool '$backPool'..."
+          Start-WebAppPool -Name $backPool
+
+          foreach ($site in @($backSite, $frontSite)) {
+            if ((Get-Website -Name $site).State -ne 'Started') { Start-Website -Name $site }
+          }
+
+          Write-Host "Deployment completed successfully!"
+          exit 0
