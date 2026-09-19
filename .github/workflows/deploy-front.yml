@@ -1,0 +1,103 @@
+name: Deploy front
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - front/**
+      - .github/workflows/deploy-front.yml
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-front
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    env:
+      API_URL: ${{ vars.API_URL }}
+    defaults:
+      run:
+        shell: bash
+        working-directory: front
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: front/package-lock.json
+
+      - name: Check variables
+        run: |
+          [ -n "$API_URL" ] || { echo "Repository variable API_URL is not set." >&2; exit 1; }
+
+      - run: npm ci
+
+      - run: npx ng test --watch=false
+
+      - name: Set API url
+        run: |
+          file=src/environments/environment.ts
+          content=$(<"$file")
+          printf '%s\n' "${content//__API_URL__/"$API_URL"}" > "$file"
+          if grep -q '__API_URL__' "$file"; then echo "Unreplaced token left in $file." >&2; exit 1; fi
+
+      - run: npx ng build --configuration production
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: front
+          path: front/dist/marine-life/browser
+          if-no-files-found: error
+
+  deploy:
+    needs: build
+    runs-on: [self-hosted, windows, iis]
+    environment: production
+    env:
+      IIS_SITE_NAME: ${{ vars.IIS_FRONT_SITE_NAME }}
+      IIS_DEPLOY_PATH: ${{ vars.IIS_FRONT_DEPLOY_PATH }}
+      SOURCE_PATH: ${{ runner.temp }}\front
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: front
+          path: ${{ runner.temp }}/front
+
+      - name: Deploy to IIS
+        run: |
+          export MSYS_NO_PATHCONV=1
+          appcmd="$WINDIR/System32/inetsrv/appcmd.exe"
+          bs='\'
+          norm() { local p; p=$(cygpath -w -a "$1"); p=${p,,}; while [[ "$p" == *"$bs" ]]; do p=${p%"$bs"}; done; printf '%s' "$p"; }
+
+          if [ -z "$IIS_SITE_NAME" ] || [ -z "$IIS_DEPLOY_PATH" ]; then
+            echo "Repository variables IIS_FRONT_SITE_NAME and IIS_FRONT_DEPLOY_PATH must be set." >&2; exit 1
+          fi
+          "$appcmd" list site "$IIS_SITE_NAME" > /dev/null || { echo "IIS site '$IIS_SITE_NAME' not found." >&2; exit 1; }
+
+          target=$(cygpath -w -a "$IIS_DEPLOY_PATH")
+          if [[ "$(norm "$IIS_DEPLOY_PATH")" =~ ^[a-z]:$ ]]; then echo "Refusing to deploy to a drive root." >&2; exit 1; fi
+
+          site_path=$("$appcmd" list vdir "$IIS_SITE_NAME/" /text:physicalPath | tr -d '\r')
+          if [ "$(norm "$site_path")" != "$(norm "$IIS_DEPLOY_PATH")" ]; then
+            echo "IIS site '$IIS_SITE_NAME' points to '$site_path', not to '$target'." >&2; exit 1
+          fi
+
+          mkdir -p "$(cygpath -u "$target")"
+
+          code=0
+          robocopy "$SOURCE_PATH" "$target" /MIR /NFL /NDL /NP /R:5 /W:3 || code=$?
+          if [ "$code" -ge 8 ]; then echo "robocopy failed (exit code $code)." >&2; exit 1; fi
+
+          state=$("$appcmd" list site "$IIS_SITE_NAME" /text:state | tr -d '\r')
+          [ "$state" = "Started" ] || "$appcmd" start site "$IIS_SITE_NAME"
