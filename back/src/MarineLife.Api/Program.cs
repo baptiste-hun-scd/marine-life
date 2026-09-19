@@ -2,7 +2,6 @@ using MarineLife.Api.Endpoints;
 using MarineLife.Api.RateLimiting;
 using MarineLife.Business;
 using MarineLife.Database;
-using MarineLife.Database.Seed;
 using MarineLife.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,11 +31,12 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+}
 
-    using var scope = app.Services.CreateScope();
+using (var scope = app.Services.CreateScope())
+{
     var dbContext = scope.ServiceProvider.GetRequiredService<MarineLifeDbContext>();
-    await dbContext.Database.EnsureCreatedAsync();
-    await DbSeeder.SeedAsync(dbContext);
+    await DatabaseInitializer.InitializeAsync(dbContext);
 }
 
 app.UseCors(FrontCorsPolicy);
