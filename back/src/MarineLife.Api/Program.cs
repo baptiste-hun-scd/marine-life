@@ -1,4 +1,5 @@
 using MarineLife.Api.Endpoints;
+using MarineLife.Api.RateLimiting;
 using MarineLife.Business;
 using MarineLife.Database;
 using MarineLife.Database.Seed;
@@ -20,6 +21,8 @@ builder.Services.AddDatabase(connectionString);
 builder.Services.AddBusiness();
 builder.Services.AddInfrastructure();
 
+builder.Services.AddApiRateLimiting(builder.Configuration);
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
@@ -35,6 +38,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors(AngularDevCorsPolicy);
+app.UseApiRateLimiting();
 
 app.MapSpeciesEndpoints();
 app.MapTaxonomyEndpoints();
