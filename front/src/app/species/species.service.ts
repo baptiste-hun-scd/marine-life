@@ -12,7 +12,6 @@ export interface SpeciesSearchParams {
 
 @Service()
 export class SpeciesService {
-  /** Looks up a single species by id via `GET /api/species/:id`. */
   byId(id: () => string | undefined) {
     return httpResource<Species>(() => {
       const value = id();
@@ -20,10 +19,6 @@ export class SpeciesService {
     });
   }
 
-  /**
-   * Lists species matching a search term and optional embranchement/classe/ordre filters, via
-   * `GET /api/species`. Skips the request entirely while no term or filter is set.
-   */
   search(params: () => SpeciesSearchParams) {
     return httpResource<Species[]>(
       () => {
@@ -54,7 +49,6 @@ export class SpeciesService {
     );
   }
 
-  /** Lists the most recently added species via `GET /api/species/latest`. */
   latest(limit = 8) {
     return httpResource<Species[]>(
       () => ({ url: `${environment.apiUrl}/species/latest`, params: { limit } }),
