@@ -54,7 +54,7 @@ jobs:
   deploy:
     needs: build
     runs-on: self-hosted
-    environment: production
+    environment: prod
     env:
       IIS_SITE_NAME: ${{ secrets.IIS_BACK_SITE_NAME }}
       IIS_DEPLOY_PATH: ${{ secrets.IIS_BACK_DEPLOY_PATH }}
