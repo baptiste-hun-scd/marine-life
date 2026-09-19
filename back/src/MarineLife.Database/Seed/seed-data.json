@@ -1,0 +1,128 @@
+{
+  "embranchements": [
+    {
+      "id": "chordata",
+      "nom": "Chordés",
+      "classes": [
+        {
+          "id": "mammalia",
+          "nom": "Mammifères",
+          "ordres": [
+            { "id": "cetacea", "nom": "Cétacés" },
+            { "id": "carnivora", "nom": "Carnivores" }
+          ]
+        },
+        {
+          "id": "chondrichthyes",
+          "nom": "Poissons cartilagineux",
+          "ordres": [
+            { "id": "carcharhiniformes", "nom": "Requins" },
+            { "id": "rajiformes", "nom": "Raies" }
+          ]
+        },
+        {
+          "id": "actinopterygii",
+          "nom": "Poissons osseux",
+          "ordres": [
+            { "id": "perciformes", "nom": "Perciformes" },
+            { "id": "anguilliformes", "nom": "Anguilliformes" }
+          ]
+        },
+        {
+          "id": "reptilia",
+          "nom": "Reptiles",
+          "ordres": [{ "id": "testudines", "nom": "Tortues marines" }]
+        }
+      ]
+    },
+    {
+      "id": "mollusca",
+      "nom": "Mollusques",
+      "classes": [
+        {
+          "id": "cephalopoda",
+          "nom": "Céphalopodes",
+          "ordres": [
+            { "id": "octopoda", "nom": "Pieuvres" },
+            { "id": "decapodiformes", "nom": "Calmars et seiches" }
+          ]
+        },
+        {
+          "id": "gastropoda",
+          "nom": "Gastéropodes",
+          "ordres": [{ "id": "nudibranchia", "nom": "Nudibranches" }]
+        }
+      ]
+    },
+    {
+      "id": "cnidaria",
+      "nom": "Cnidaires",
+      "classes": [
+        {
+          "id": "anthozoa",
+          "nom": "Anthozoaires",
+          "ordres": [{ "id": "scleractinia", "nom": "Coraux durs" }]
+        },
+        {
+          "id": "scyphozoa",
+          "nom": "Scyphozoaires",
+          "ordres": [{ "id": "semaeostomeae", "nom": "Méduses" }]
+        }
+      ]
+    },
+    {
+      "id": "arthropoda",
+      "nom": "Arthropodes",
+      "classes": [
+        {
+          "id": "malacostraca",
+          "nom": "Malacostracés",
+          "ordres": [{ "id": "decapoda", "nom": "Crabes, crevettes et homards" }]
+        }
+      ]
+    }
+  ],
+  "species": [
+    {
+      "id": "grand-dauphin",
+      "commonName": "Grand dauphin",
+      "scientificName": "Tursiops truncatus",
+      "ordreId": "cetacea",
+      "vulnerabilityLevel": "Vert",
+      "description": "Le grand dauphin est un cétacé très sociable, réputé pour son intelligence et vivant en groupes structurés appelés pods, qui peuvent compter de quelques individus à plusieurs centaines. Il communique grâce à un répertoire varié de sifflements, de clics d'écholocation et de langage corporel, et chasse souvent en coopération pour rabattre les bancs de poissons. Sa maturité sexuelle est atteinte entre 5 et 13 ans selon les populations, et sa longévité peut dépasser 40 ans à l'état sauvage.",
+      "habitat": "Eaux côtières tempérées et tropicales du monde entier.",
+      "imageUrl": "https://picsum.photos/1200/675",
+      "distributionMapUrl": "https://picsum.photos/800/400"
+    },
+    { "id": "baleine-bleue", "commonName": "Baleine bleue", "scientificName": "Balaenoptera musculus", "ordreId": "cetacea", "vulnerabilityLevel": "Rouge", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "orque", "commonName": "Orque", "scientificName": "Orcinus orca", "ordreId": "cetacea", "vulnerabilityLevel": "Orange", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "phoque-gris", "commonName": "Phoque gris", "scientificName": "Halichoerus grypus", "ordreId": "carnivora", "vulnerabilityLevel": "Vert", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "loutre-de-mer", "commonName": "Loutre de mer", "scientificName": "Enhydra lutris", "ordreId": "carnivora", "vulnerabilityLevel": "Orange", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "grand-requin-blanc", "commonName": "Grand requin blanc", "scientificName": "Carcharodon carcharias", "ordreId": "carcharhiniformes", "vulnerabilityLevel": "Rouge", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "requin-marteau-halicorne", "commonName": "Requin-marteau halicorne", "scientificName": "Sphyrna lewini", "ordreId": "carcharhiniformes", "vulnerabilityLevel": "Rouge", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "requin-tigre", "commonName": "Requin-tigre", "scientificName": "Galeocerdo cuvier", "ordreId": "carcharhiniformes", "vulnerabilityLevel": "Orange", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "raie-manta", "commonName": "Raie manta", "scientificName": "Mobula birostris", "ordreId": "rajiformes", "vulnerabilityLevel": "Orange", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "raie-pastenague", "commonName": "Raie pastenague", "scientificName": "Dasyatis pastinaca", "ordreId": "rajiformes", "vulnerabilityLevel": "Vert", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "thon-rouge", "commonName": "Thon rouge", "scientificName": "Thunnus thynnus", "ordreId": "perciformes", "vulnerabilityLevel": "Rouge", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "merou-brun", "commonName": "Mérou brun", "scientificName": "Epinephelus marginatus", "ordreId": "perciformes", "vulnerabilityLevel": "Orange", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "poisson-clown", "commonName": "Poisson-clown", "scientificName": "Amphiprion ocellaris", "ordreId": "perciformes", "vulnerabilityLevel": "Vert", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "anguille-europeenne", "commonName": "Anguille européenne", "scientificName": "Anguilla anguilla", "ordreId": "anguilliformes", "vulnerabilityLevel": "Rouge", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "murene-commune", "commonName": "Murène commune", "scientificName": "Muraena helena", "ordreId": "anguilliformes", "vulnerabilityLevel": "Vert", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "tortue-caouanne", "commonName": "Tortue caouanne", "scientificName": "Caretta caretta", "ordreId": "testudines", "vulnerabilityLevel": "Orange", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "tortue-verte", "commonName": "Tortue verte", "scientificName": "Chelonia mydas", "ordreId": "testudines", "vulnerabilityLevel": "Orange", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "tortue-luth", "commonName": "Tortue luth", "scientificName": "Dermochelys coriacea", "ordreId": "testudines", "vulnerabilityLevel": "Rouge", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "pieuvre-commune", "commonName": "Pieuvre commune", "scientificName": "Octopus vulgaris", "ordreId": "octopoda", "vulnerabilityLevel": "Vert", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "pieuvre-geante-du-pacifique", "commonName": "Pieuvre géante du Pacifique", "scientificName": "Enteroctopus dofleini", "ordreId": "octopoda", "vulnerabilityLevel": "Vert", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "calmar-geant", "commonName": "Calmar géant", "scientificName": "Architeuthis dux", "ordreId": "decapodiformes", "vulnerabilityLevel": "Vert", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "seiche-commune", "commonName": "Seiche commune", "scientificName": "Sepia officinalis", "ordreId": "decapodiformes", "vulnerabilityLevel": "Vert", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "nudibranche-espagnol", "commonName": "Nudibranche espagnol", "scientificName": "Flabellina affinis", "ordreId": "nudibranchia", "vulnerabilityLevel": "Vert", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "doris-dalmatien", "commonName": "Doris dalmatien", "scientificName": "Peltodoris atromaculata", "ordreId": "nudibranchia", "vulnerabilityLevel": "Vert", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "corail-cerveau", "commonName": "Corail cerveau", "scientificName": "Diploria labyrinthiformis", "ordreId": "scleractinia", "vulnerabilityLevel": "Orange", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "corail-corne-delan", "commonName": "Corail corne d'élan", "scientificName": "Acropora palmata", "ordreId": "scleractinia", "vulnerabilityLevel": "Rouge", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "meduse-boussole", "commonName": "Méduse boussole", "scientificName": "Chrysaora hysoscella", "ordreId": "semaeostomeae", "vulnerabilityLevel": "Vert", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "meduse-lune", "commonName": "Méduse lune", "scientificName": "Aurelia aurita", "ordreId": "semaeostomeae", "vulnerabilityLevel": "Vert", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "crabe-vert-europeen", "commonName": "Crabe vert européen", "scientificName": "Carcinus maenas", "ordreId": "decapoda", "vulnerabilityLevel": "Vert", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "homard-europeen", "commonName": "Homard européen", "scientificName": "Homarus gammarus", "ordreId": "decapoda", "vulnerabilityLevel": "Orange", "imageUrl": "https://picsum.photos/200/300" },
+    { "id": "crevette-bouquet", "commonName": "Crevette bouquet", "scientificName": "Palaemon serratus", "ordreId": "decapoda", "vulnerabilityLevel": "Vert", "imageUrl": "https://picsum.photos/200/300" }
+  ]
+}
